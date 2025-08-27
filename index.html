@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ShadowFight - Story Pro</title><link rel="stylesheet" href="style.css"/></head>
+<body>
+<header><h1>ShadowFight — Story Pro</h1><div class="sub">A narrative-driven fighting RPG — Pro Demo</div></header>
+<main>
+  <section id="left">
+    <div id="chat" class="chat" aria-live="polite"></div>
+    <div id="choices" class="choices"></div>
+  </section>
+  <section id="right">
+    <canvas id="arena" width="960" height="540"></canvas>
+    <div id="combatUI" class="combatUI hidden"><div id="combatStatus"></div><div class="controls">Attack: J &nbsp; Block: K &nbsp; Restart: R</div></div>
+  </section>
+</main>
+<footer><div id="branding">Made by Koi for Nakama</div><div class="actions"><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="exportBtn">Export Story JSON</button></div></footer>
+<script src="main.js"></script>
+</body>
+</html>
