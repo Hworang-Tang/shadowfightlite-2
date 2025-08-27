@@ -1,0 +1,4320 @@
+
+// main.js - ShadowFight Story Pro engine (fallback embedded)
+const STORY_INLINE = {
+  "start": {
+    "id": "start",
+    "title": "Prologue: The Oath",
+    "speaker": "Narrator",
+    "text": [
+      "The moon sits low over the sleeping city of Kurogane — steel and shadow in equal measure.",
+      "You are Akio, once a student of the Bladeway, now a traveler bound by an oath: to defend those who cannot.",
+      "A whisper arrives on the wind. Tonight the tournament begins.",
+      "Your story begins at a lantern-lit gate."
+    ],
+    "choices": [
+      {
+        "text": "Step forward into the gate",
+        "next": "meet_mentor"
+      }
+    ]
+  },
+  "meet_mentor": {
+    "id": "meet_mentor",
+    "title": "A Familiar Voice",
+    "speaker": "Mentor",
+    "text": [
+      "An old mentor, Master Sora, greets you with a nod. 'You seek purpose, child. The arena will test you.'",
+      "'Learn this: strength without restraint becomes a prison.'"
+    ],
+    "choices": [
+      {
+        "text": "Ask about the tournament",
+        "next": "tourney_info"
+      },
+      {
+        "text": "Train with Master Sora",
+        "next": "training_1"
+      }
+    ]
+  },
+  "tourney_info": {
+    "id": "tourney_info",
+    "title": "The Tournament",
+    "speaker": "Mentor",
+    "text": [
+      "Master Sora explains: 'The Ember Tournament crowns the strongest — but also peels secrets away.'",
+      "'There is prize and there is risk. Choose your path: honor, power, or cunning.'"
+    ],
+    "choices": [
+      {
+        "text": "Pursue honor",
+        "next": "path_honor"
+      },
+      {
+        "text": "Seek power",
+        "next": "path_power"
+      },
+      {
+        "text": "Play cunning",
+        "next": "path_cunning"
+      }
+    ]
+  },
+  "training_1": {
+    "id": "training_1",
+    "title": "Training Begins",
+    "speaker": "Mentor",
+    "text": [
+      "You spend days training under Sora..."
+    ],
+    "choices": [
+      {
+        "text": "Focus on speed",
+        "next": "training_speed"
+      },
+      {
+        "text": "Focus on defense",
+        "next": "training_defense"
+      },
+      {
+        "text": "Wander the town",
+        "next": "v87"
+      }
+    ]
+  },
+  "training_speed": {
+    "id": "training_speed",
+    "title": "Speed Drills",
+    "speaker": "Mentor",
+    "text": [
+      "Your footwork becomes whisper-quick..."
+    ],
+    "choices": [
+      {
+        "text": "Approach Rin",
+        "next": "rival_approach"
+      },
+      {
+        "text": "Ignore and continue training",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "training_defense": {
+    "id": "training_defense",
+    "title": "The Guard",
+    "speaker": "Mentor",
+    "text": [
+      "You learn to absorb momentum..."
+    ],
+    "choices": [
+      {
+        "text": "Practice counters",
+        "next": "tourney_info"
+      },
+      {
+        "text": "Test with a spar",
+        "next": "spar_test"
+      }
+    ]
+  },
+  "rival_approach": {
+    "id": "rival_approach",
+    "title": "Rivalry Sparks",
+    "speaker": "Rival",
+    "text": [
+      "Rin steps forward. 'I heard about your training...'"
+    ],
+    "choices": [
+      {
+        "text": "Accept the spar",
+        "next": "spar_rin"
+      },
+      {
+        "text": "Decline politely",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "spar_rin": {
+    "id": "spar_rin",
+    "title": "Spar with Rin",
+    "speaker": "Narrator",
+    "text": [
+      "The spar is fast and precise..."
+    ],
+    "choices": [
+      {
+        "text": "Continue to tournament preparation",
+        "next": "tourney_info",
+        "effect": {
+          "type": "modify",
+          "rivalRespect": 1
+        }
+      }
+    ]
+  },
+  "spar_test": {
+    "id": "spar_test",
+    "title": "Practice Spar",
+    "speaker": "Narrator",
+    "text": [
+      "A local sparring partner tests your counters..."
+    ],
+    "choices": [
+      {
+        "text": "Return to Master Sora",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "path_honor": {
+    "id": "path_honor",
+    "title": "The Path of Honor",
+    "speaker": "Narrator",
+    "text": [
+      "You choose honor..."
+    ],
+    "choices": [
+      {
+        "text": "Train for the tournament",
+        "next": "training_1"
+      }
+    ]
+  },
+  "path_power": {
+    "id": "path_power",
+    "title": "The Path of Power",
+    "speaker": "Narrator",
+    "text": [
+      "You choose power..."
+    ],
+    "choices": [
+      {
+        "text": "Seek the shadow teacher",
+        "next": "shadow_teacher"
+      },
+      {
+        "text": "Rely on your own strength",
+        "next": "training_speed"
+      }
+    ]
+  },
+  "path_cunning": {
+    "id": "path_cunning",
+    "title": "The Path of Cunning",
+    "speaker": "Narrator",
+    "text": [
+      "You choose cunning..."
+    ],
+    "choices": [
+      {
+        "text": "Learn deception",
+        "next": "learn_deception"
+      },
+      {
+        "text": "Make alliances",
+        "next": "make_allies"
+      }
+    ]
+  },
+  "shadow_teacher": {
+    "id": "shadow_teacher",
+    "title": "Teacher in the Dark",
+    "speaker": "Stranger",
+    "text": [
+      "A hooded figure offers the Nightshard..."
+    ],
+    "choices": [
+      {
+        "text": "Accept Nightshard",
+        "next": "corrupt_path",
+        "effect": {
+          "type": "modify",
+          "corruption": 2
+        }
+      },
+      {
+        "text": "Refuse",
+        "next": "training_1"
+      }
+    ]
+  },
+  "corrupt_path": {
+    "id": "corrupt_path",
+    "title": "Whispers of Corruption",
+    "speaker": "Narrator",
+    "text": [
+      "The Nightshard flows through your veins like ice."
+    ],
+    "choices": [
+      {
+        "text": "Continue to tournament",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "learn_deception": {
+    "id": "learn_deception",
+    "title": "Learning Deceit",
+    "speaker": "Stranger",
+    "text": [
+      "You learn to read intentions..."
+    ],
+    "choices": [
+      {
+        "text": "Use deception in the tournament",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "make_allies": {
+    "id": "make_allies",
+    "title": "Brokering Alliances",
+    "speaker": "Narrator",
+    "text": [
+      "You forge a pact with a merchant..."
+    ],
+    "choices": [
+      {
+        "text": "Accept ally responsibilities",
+        "next": "ally_event"
+      },
+      {
+        "text": "Keep alliances loose",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "ally_event": {
+    "id": "ally_event",
+    "title": "Call to Aid",
+    "speaker": "Mentor",
+    "text": [
+      "Your allies ask for a favor..."
+    ],
+    "choices": [
+      {
+        "text": "Defend the caravan",
+        "next": "caravan_defend"
+      },
+      {
+        "text": "Refuse, stay for training",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "caravan_defend": {
+    "id": "caravan_defend",
+    "title": "Ambush",
+    "speaker": "Narrator",
+    "text": [
+      "Bandits strike the caravan..."
+    ],
+    "choices": [
+      {
+        "text": "Return to tournament",
+        "next": "tourney_info",
+        "effect": {
+          "type": "modify",
+          "reputation": 2
+        }
+      }
+    ]
+  },
+  "tourney_start": {
+    "id": "tourney_start",
+    "title": "Tournament Gates",
+    "speaker": "Announcer",
+    "text": [
+      "The Ember Tournament podiums glow..."
+    ],
+    "choices": [
+      {
+        "text": "Enter the first match",
+        "next": "match_1"
+      }
+    ]
+  },
+  "match_1": {
+    "id": "match_1",
+    "title": "Round One",
+    "speaker": "Announcer",
+    "text": [
+      "Your first opponent is a novice..."
+    ],
+    "choices": [
+      {
+        "text": "Continue to next round",
+        "next": "match_2",
+        "effect": {
+          "type": "modify",
+          "stamina": -5
+        }
+      }
+    ]
+  },
+  "match_2": {
+    "id": "match_2",
+    "title": "Round Two",
+    "speaker": "Announcer",
+    "text": [
+      "The crowd roars..."
+    ],
+    "choices": [
+      {
+        "text": "Use speed approach",
+        "next": "match_2_speed"
+      },
+      {
+        "text": "Use defensive counters",
+        "next": "match_2_defense"
+      }
+    ]
+  },
+  "match_2_speed": {
+    "id": "match_2_speed",
+    "title": "Speed vs Feint",
+    "speaker": "Narrator",
+    "text": [
+      "You close gaps and land a feather strike..."
+    ],
+    "choices": [
+      {
+        "text": "Advance to quarterfinals",
+        "next": "quarter_1"
+      }
+    ]
+  },
+  "match_2_defense": {
+    "id": "match_2_defense",
+    "title": "Counter Mastery",
+    "speaker": "Narrator",
+    "text": [
+      "You bait a feint..."
+    ],
+    "choices": [
+      {
+        "text": "Advance to quarterfinals",
+        "next": "quarter_1"
+      }
+    ]
+  },
+  "quarter_1": {
+    "id": "quarter_1",
+    "title": "Quarterfinal",
+    "speaker": "Announcer",
+    "text": [
+      "The quarterfinals bring a test of endurance..."
+    ],
+    "choices": [
+      {
+        "text": "Face the silent blade",
+        "next": "silent_blade"
+      }
+    ]
+  },
+  "silent_blade": {
+    "id": "silent_blade",
+    "title": "Silent Blade",
+    "speaker": "Enemy",
+    "text": [
+      "A masked fighter approaches..."
+    ],
+    "choices": [
+      {
+        "text": "Fight normally",
+        "next": "silent_fight"
+      },
+      {
+        "text": "Try to unmask them mid-fight",
+        "next": "unmask_attempt"
+      }
+    ]
+  },
+  "silent_fight": {
+    "id": "silent_fight",
+    "title": "Strike and Hold",
+    "speaker": "Narrator",
+    "text": [
+      "You trade blows..."
+    ],
+    "choices": [
+      {
+        "text": "Move to semifinals",
+        "next": "semifinal"
+      }
+    ]
+  },
+  "unmask_attempt": {
+    "id": "unmask_attempt",
+    "title": "The Mask Shifts",
+    "speaker": "Narrator",
+    "text": [
+      "You attempt to unmask mid-fight..."
+    ],
+    "choices": [
+      {
+        "text": "Exploit the shock and press the attack",
+        "next": "rival_battle"
+      },
+      {
+        "text": "Pause, try to reason",
+        "next": "reason_with_rin"
+      }
+    ]
+  },
+  "rival_battle": {
+    "id": "rival_battle",
+    "title": "Rin Revealed",
+    "speaker": "Rival",
+    "text": [
+      "Rin fights with personal fury..."
+    ],
+    "choices": [
+      {
+        "text": "Press forward",
+        "next": "rival_end_win",
+        "effect": {
+          "type": "modify",
+          "rivalAnger": 2
+        }
+      },
+      {
+        "text": "Hold back and speak",
+        "next": "rival_end_talk"
+      }
+    ]
+  },
+  "reason_with_rin": {
+    "id": "reason_with_rin",
+    "title": "Words in the Ring",
+    "speaker": "Player",
+    "text": [
+      "You speak: 'Why challenge in secret? We are better than this.'"
+    ],
+    "choices": [
+      {
+        "text": "Offer help after the tourney",
+        "next": "rival_alliance"
+      },
+      {
+        "text": "Exploit the moment and strike",
+        "next": "rival_battle"
+      }
+    ]
+  },
+  "rival_end_win": {
+    "id": "rival_end_win",
+    "title": "Rin Bested",
+    "speaker": "Narrator",
+    "text": [
+      "Your strike lands true..."
+    ],
+    "choices": [
+      {
+        "text": "Carry on to semifinals",
+        "next": "semifinal"
+      }
+    ]
+  },
+  "rival_end_talk": {
+    "id": "rival_end_talk",
+    "title": "A Fragile Truce",
+    "speaker": "Narrator",
+    "text": [
+      "Talking yields a fragile truce..."
+    ],
+    "choices": [
+      {
+        "text": "Proceed to semifinals",
+        "next": "semifinal",
+        "effect": {
+          "type": "modify",
+          "rivalRespect": 2
+        }
+      }
+    ]
+  },
+  "rival_alliance": {
+    "id": "rival_alliance",
+    "title": "Rin's Debt",
+    "speaker": "Rival",
+    "text": [
+      "Rin accepts your aid..."
+    ],
+    "choices": [
+      {
+        "text": "Enter semifinals with an ally",
+        "next": "semifinal",
+        "effect": {
+          "type": "modify",
+          "allyHelp": 1
+        }
+      }
+    ]
+  },
+  "semifinal": {
+    "id": "semifinal",
+    "title": "Semifinals",
+    "speaker": "Announcer",
+    "text": [
+      "Semifinals demand focus..."
+    ],
+    "choices": [
+      {
+        "text": "Face the Merchant's Champion",
+        "next": "champ_fight"
+      }
+    ]
+  },
+  "champ_fight": {
+    "id": "champ_fight",
+    "title": "Merchant's Champion",
+    "speaker": "Enemy",
+    "text": [
+      "Clad in odd armor..."
+    ],
+    "choices": [
+      {
+        "text": "Adapt tactics",
+        "next": "champ_win"
+      },
+      {
+        "text": "Use brute force",
+        "next": "champ_lose"
+      }
+    ]
+  },
+  "champ_win": {
+    "id": "champ_win",
+    "title": "Gadgetry Overcome",
+    "speaker": "Narrator",
+    "text": [
+      "You break the champion's rhythm..."
+    ],
+    "choices": [
+      {
+        "text": "Enter Final",
+        "next": "final_prep"
+      }
+    ]
+  },
+  "champ_lose": {
+    "id": "champ_lose",
+    "title": "A Misstep",
+    "speaker": "Narrator",
+    "text": [
+      "Your brute force is outmaneuvered..."
+    ],
+    "choices": [
+      {
+        "text": "Regroup and try again next year",
+        "next": "epilogue_defeat"
+      }
+    ]
+  },
+  "final_prep": {
+    "id": "final_prep",
+    "title": "Final Preparations",
+    "speaker": "Mentor",
+    "text": [
+      "Only one day remains before the finals..."
+    ],
+    "choices": [
+      {
+        "text": "Embrace mercy and honor",
+        "next": "final_choice_honor"
+      },
+      {
+        "text": "Seize absolute power",
+        "next": "final_choice_power"
+      },
+      {
+        "text": "Use deception to win",
+        "next": "final_choice_cunning"
+      }
+    ]
+  },
+  "final_choice_honor": {
+    "id": "final_choice_honor",
+    "title": "Final - Honor",
+    "speaker": "Narrator",
+    "text": [
+      "You step into the final ring with a clear heart..."
+    ],
+    "choices": [
+      {
+        "text": "Victory by mercy",
+        "next": "ending_legend"
+      }
+    ]
+  },
+  "final_choice_power": {
+    "id": "final_choice_power",
+    "title": "Final - Power",
+    "speaker": "Narrator",
+    "text": [
+      "You unleash forbidden strength..."
+    ],
+    "choices": [
+      {
+        "text": "Victory by domination",
+        "next": "ending_tyrant"
+      }
+    ]
+  },
+  "final_choice_cunning": {
+    "id": "final_choice_cunning",
+    "title": "Final - Cunning",
+    "speaker": "Narrator",
+    "text": [
+      "You use tricks and an elaborate ruse to win..."
+    ],
+    "choices": [
+      {
+        "text": "Victory by guile",
+        "next": "ending_exile"
+      }
+    ]
+  },
+  "ending_legend": {
+    "id": "ending_legend",
+    "title": "Legend of Mercy",
+    "speaker": "Narrator",
+    "text": [
+      "You become a legend..."
+    ],
+    "choices": [
+      {
+        "text": "Play Again",
+        "next": "start"
+      }
+    ]
+  },
+  "ending_tyrant": {
+    "id": "ending_tyrant",
+    "title": "Crown of Ash",
+    "speaker": "Narrator",
+    "text": [
+      "You are feared and powerful..."
+    ],
+    "choices": [
+      {
+        "text": "Play Again",
+        "next": "start"
+      }
+    ]
+  },
+  "ending_exile": {
+    "id": "ending_exile",
+    "title": "Shadow's Price",
+    "speaker": "Narrator",
+    "text": [
+      "You win through cunning..."
+    ],
+    "choices": [
+      {
+        "text": "Play Again",
+        "next": "start"
+      }
+    ]
+  },
+  "epilogue_defeat": {
+    "id": "epilogue_defeat",
+    "title": "Defeat & Reflection",
+    "speaker": "Narrator",
+    "text": [
+      "Defeat offers time to grow..."
+    ],
+    "choices": [
+      {
+        "text": "Return Home",
+        "next": "start"
+      }
+    ]
+  },
+  "shop_visit": {
+    "id": "shop_visit",
+    "title": "The Market Stall",
+    "speaker": "Merchant",
+    "text": [
+      "At the market, a vendor sells a mysterious oil..."
+    ],
+    "choices": [
+      {
+        "text": "Buy the oil (cost 10)",
+        "next": "bought_oil",
+        "effect": {
+          "type": "modify",
+          "gold": -10,
+          "stamina": 5
+        }
+      },
+      {
+        "text": "Decline",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "bought_oil": {
+    "id": "bought_oil",
+    "title": "Sharpened",
+    "speaker": "Narrator",
+    "text": [
+      "You feel lighter, quicker..."
+    ],
+    "choices": [
+      {
+        "text": "Return to preparation",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v1": {
+    "id": "v1",
+    "title": "Vignette 1",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 1)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v2": {
+    "id": "v2",
+    "title": "Vignette 2",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 2)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v3": {
+    "id": "v3",
+    "title": "Vignette 3",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 3)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v4": {
+    "id": "v4",
+    "title": "Vignette 4",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 4)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v5": {
+    "id": "v5",
+    "title": "Vignette 5",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 5)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v6": {
+    "id": "v6",
+    "title": "Vignette 6",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 6)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v7": {
+    "id": "v7",
+    "title": "Vignette 7",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 7)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v8": {
+    "id": "v8",
+    "title": "Vignette 8",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 8)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v9": {
+    "id": "v9",
+    "title": "Vignette 9",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 9)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v10": {
+    "id": "v10",
+    "title": "Vignette 10",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 10)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v11": {
+    "id": "v11",
+    "title": "Vignette 11",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 11)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v12": {
+    "id": "v12",
+    "title": "Vignette 12",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 12)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v13": {
+    "id": "v13",
+    "title": "Vignette 13",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 13)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v14": {
+    "id": "v14",
+    "title": "Vignette 14",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 14)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v15": {
+    "id": "v15",
+    "title": "Vignette 15",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 15)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v16": {
+    "id": "v16",
+    "title": "Vignette 16",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 16)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v17": {
+    "id": "v17",
+    "title": "Vignette 17",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 17)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v18": {
+    "id": "v18",
+    "title": "Vignette 18",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 18)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v19": {
+    "id": "v19",
+    "title": "Vignette 19",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 19)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v20": {
+    "id": "v20",
+    "title": "Vignette 20",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 20)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v21": {
+    "id": "v21",
+    "title": "Vignette 21",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 21)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v22": {
+    "id": "v22",
+    "title": "Vignette 22",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 22)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v23": {
+    "id": "v23",
+    "title": "Vignette 23",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 23)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v24": {
+    "id": "v24",
+    "title": "Vignette 24",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 24)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v25": {
+    "id": "v25",
+    "title": "Vignette 25",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 25)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v26": {
+    "id": "v26",
+    "title": "Vignette 26",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 26)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v27": {
+    "id": "v27",
+    "title": "Vignette 27",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 27)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v28": {
+    "id": "v28",
+    "title": "Vignette 28",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 28)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v29": {
+    "id": "v29",
+    "title": "Vignette 29",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 29)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v30": {
+    "id": "v30",
+    "title": "Vignette 30",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 30)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v31": {
+    "id": "v31",
+    "title": "Vignette 31",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 31)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v32": {
+    "id": "v32",
+    "title": "Vignette 32",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 32)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v33": {
+    "id": "v33",
+    "title": "Vignette 33",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 33)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v34": {
+    "id": "v34",
+    "title": "Vignette 34",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 34)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v35": {
+    "id": "v35",
+    "title": "Vignette 35",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 35)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v36": {
+    "id": "v36",
+    "title": "Vignette 36",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 36)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v37": {
+    "id": "v37",
+    "title": "Vignette 37",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 37)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v38": {
+    "id": "v38",
+    "title": "Vignette 38",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 38)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v39": {
+    "id": "v39",
+    "title": "Vignette 39",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 39)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v40": {
+    "id": "v40",
+    "title": "Vignette 40",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 40)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v41": {
+    "id": "v41",
+    "title": "Vignette 41",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 41)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v42": {
+    "id": "v42",
+    "title": "Vignette 42",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 42)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v43": {
+    "id": "v43",
+    "title": "Vignette 43",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 43)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v44": {
+    "id": "v44",
+    "title": "Vignette 44",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 44)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v45": {
+    "id": "v45",
+    "title": "Vignette 45",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 45)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v46": {
+    "id": "v46",
+    "title": "Vignette 46",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 46)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v47": {
+    "id": "v47",
+    "title": "Vignette 47",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 47)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v48": {
+    "id": "v48",
+    "title": "Vignette 48",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 48)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v49": {
+    "id": "v49",
+    "title": "Vignette 49",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 49)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v50": {
+    "id": "v50",
+    "title": "Vignette 50",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 50)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v51": {
+    "id": "v51",
+    "title": "Vignette 51",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 51)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v52": {
+    "id": "v52",
+    "title": "Vignette 52",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 52)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v53": {
+    "id": "v53",
+    "title": "Vignette 53",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 53)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v54": {
+    "id": "v54",
+    "title": "Vignette 54",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 54)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v55": {
+    "id": "v55",
+    "title": "Vignette 55",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 55)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v56": {
+    "id": "v56",
+    "title": "Vignette 56",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 56)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v57": {
+    "id": "v57",
+    "title": "Vignette 57",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 57)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v58": {
+    "id": "v58",
+    "title": "Vignette 58",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 58)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v59": {
+    "id": "v59",
+    "title": "Vignette 59",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 59)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v60": {
+    "id": "v60",
+    "title": "Vignette 60",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 60)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v61": {
+    "id": "v61",
+    "title": "Vignette 61",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 61)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v62": {
+    "id": "v62",
+    "title": "Vignette 62",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 62)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v63": {
+    "id": "v63",
+    "title": "Vignette 63",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 63)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v64": {
+    "id": "v64",
+    "title": "Vignette 64",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 64)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v65": {
+    "id": "v65",
+    "title": "Vignette 65",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 65)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v66": {
+    "id": "v66",
+    "title": "Vignette 66",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 66)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v67": {
+    "id": "v67",
+    "title": "Vignette 67",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 67)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v68": {
+    "id": "v68",
+    "title": "Vignette 68",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 68)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v69": {
+    "id": "v69",
+    "title": "Vignette 69",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 69)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v70": {
+    "id": "v70",
+    "title": "Vignette 70",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 70)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v71": {
+    "id": "v71",
+    "title": "Vignette 71",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 71)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v72": {
+    "id": "v72",
+    "title": "Vignette 72",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 72)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v73": {
+    "id": "v73",
+    "title": "Vignette 73",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 73)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v74": {
+    "id": "v74",
+    "title": "Vignette 74",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 74)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v75": {
+    "id": "v75",
+    "title": "Vignette 75",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 75)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v76": {
+    "id": "v76",
+    "title": "Vignette 76",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 76)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v77": {
+    "id": "v77",
+    "title": "Vignette 77",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 77)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v78": {
+    "id": "v78",
+    "title": "Vignette 78",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 78)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v79": {
+    "id": "v79",
+    "title": "Vignette 79",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 79)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v80": {
+    "id": "v80",
+    "title": "Vignette 80",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 80)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v81": {
+    "id": "v81",
+    "title": "Vignette 81",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 81)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v82": {
+    "id": "v82",
+    "title": "Vignette 82",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 82)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v83": {
+    "id": "v83",
+    "title": "Vignette 83",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 83)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v84": {
+    "id": "v84",
+    "title": "Vignette 84",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 84)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v85": {
+    "id": "v85",
+    "title": "Vignette 85",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 85)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v86": {
+    "id": "v86",
+    "title": "Vignette 86",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 86)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v87": {
+    "id": "v87",
+    "title": "Vignette 87",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 87)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v88": {
+    "id": "v88",
+    "title": "Vignette 88",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 88)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v89": {
+    "id": "v89",
+    "title": "Vignette 89",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 89)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v90": {
+    "id": "v90",
+    "title": "Vignette 90",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 90)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v91": {
+    "id": "v91",
+    "title": "Vignette 91",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 91)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v92": {
+    "id": "v92",
+    "title": "Vignette 92",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 92)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v93": {
+    "id": "v93",
+    "title": "Vignette 93",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 93)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v94": {
+    "id": "v94",
+    "title": "Vignette 94",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 94)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v95": {
+    "id": "v95",
+    "title": "Vignette 95",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 95)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v96": {
+    "id": "v96",
+    "title": "Vignette 96",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 96)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v97": {
+    "id": "v97",
+    "title": "Vignette 97",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 97)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v98": {
+    "id": "v98",
+    "title": "Vignette 98",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 98)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v99": {
+    "id": "v99",
+    "title": "Vignette 99",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 99)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v100": {
+    "id": "v100",
+    "title": "Vignette 100",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 100)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v101": {
+    "id": "v101",
+    "title": "Vignette 101",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 101)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v102": {
+    "id": "v102",
+    "title": "Vignette 102",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 102)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v103": {
+    "id": "v103",
+    "title": "Vignette 103",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 103)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v104": {
+    "id": "v104",
+    "title": "Vignette 104",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 104)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v105": {
+    "id": "v105",
+    "title": "Vignette 105",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 105)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v106": {
+    "id": "v106",
+    "title": "Vignette 106",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 106)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v107": {
+    "id": "v107",
+    "title": "Vignette 107",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 107)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v108": {
+    "id": "v108",
+    "title": "Vignette 108",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 108)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v109": {
+    "id": "v109",
+    "title": "Vignette 109",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 109)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v110": {
+    "id": "v110",
+    "title": "Vignette 110",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 110)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v111": {
+    "id": "v111",
+    "title": "Vignette 111",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 111)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v112": {
+    "id": "v112",
+    "title": "Vignette 112",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 112)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v113": {
+    "id": "v113",
+    "title": "Vignette 113",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 113)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v114": {
+    "id": "v114",
+    "title": "Vignette 114",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 114)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v115": {
+    "id": "v115",
+    "title": "Vignette 115",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 115)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v116": {
+    "id": "v116",
+    "title": "Vignette 116",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 116)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v117": {
+    "id": "v117",
+    "title": "Vignette 117",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 117)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v118": {
+    "id": "v118",
+    "title": "Vignette 118",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 118)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v119": {
+    "id": "v119",
+    "title": "Vignette 119",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 119)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v120": {
+    "id": "v120",
+    "title": "Vignette 120",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 120)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v121": {
+    "id": "v121",
+    "title": "Vignette 121",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 121)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v122": {
+    "id": "v122",
+    "title": "Vignette 122",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 122)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v123": {
+    "id": "v123",
+    "title": "Vignette 123",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 123)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v124": {
+    "id": "v124",
+    "title": "Vignette 124",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 124)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v125": {
+    "id": "v125",
+    "title": "Vignette 125",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 125)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v126": {
+    "id": "v126",
+    "title": "Vignette 126",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 126)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v127": {
+    "id": "v127",
+    "title": "Vignette 127",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 127)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v128": {
+    "id": "v128",
+    "title": "Vignette 128",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 128)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v129": {
+    "id": "v129",
+    "title": "Vignette 129",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 129)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v130": {
+    "id": "v130",
+    "title": "Vignette 130",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 130)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v131": {
+    "id": "v131",
+    "title": "Vignette 131",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 131)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v132": {
+    "id": "v132",
+    "title": "Vignette 132",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 132)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v133": {
+    "id": "v133",
+    "title": "Vignette 133",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 133)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v134": {
+    "id": "v134",
+    "title": "Vignette 134",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 134)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v135": {
+    "id": "v135",
+    "title": "Vignette 135",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 135)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v136": {
+    "id": "v136",
+    "title": "Vignette 136",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 136)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v137": {
+    "id": "v137",
+    "title": "Vignette 137",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 137)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v138": {
+    "id": "v138",
+    "title": "Vignette 138",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 138)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v139": {
+    "id": "v139",
+    "title": "Vignette 139",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 139)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v140": {
+    "id": "v140",
+    "title": "Vignette 140",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 140)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v141": {
+    "id": "v141",
+    "title": "Vignette 141",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 141)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v142": {
+    "id": "v142",
+    "title": "Vignette 142",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 142)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v143": {
+    "id": "v143",
+    "title": "Vignette 143",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 143)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v144": {
+    "id": "v144",
+    "title": "Vignette 144",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 144)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v145": {
+    "id": "v145",
+    "title": "Vignette 145",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 145)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v146": {
+    "id": "v146",
+    "title": "Vignette 146",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 146)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v147": {
+    "id": "v147",
+    "title": "Vignette 147",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 147)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v148": {
+    "id": "v148",
+    "title": "Vignette 148",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 148)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v149": {
+    "id": "v149",
+    "title": "Vignette 149",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 149)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v150": {
+    "id": "v150",
+    "title": "Vignette 150",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 150)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v151": {
+    "id": "v151",
+    "title": "Vignette 151",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 151)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v152": {
+    "id": "v152",
+    "title": "Vignette 152",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 152)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v153": {
+    "id": "v153",
+    "title": "Vignette 153",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 153)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v154": {
+    "id": "v154",
+    "title": "Vignette 154",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 154)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v155": {
+    "id": "v155",
+    "title": "Vignette 155",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 155)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v156": {
+    "id": "v156",
+    "title": "Vignette 156",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 156)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v157": {
+    "id": "v157",
+    "title": "Vignette 157",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 157)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v158": {
+    "id": "v158",
+    "title": "Vignette 158",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 158)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v159": {
+    "id": "v159",
+    "title": "Vignette 159",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 159)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v160": {
+    "id": "v160",
+    "title": "Vignette 160",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 160)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v161": {
+    "id": "v161",
+    "title": "Vignette 161",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 161)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v162": {
+    "id": "v162",
+    "title": "Vignette 162",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 162)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v163": {
+    "id": "v163",
+    "title": "Vignette 163",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 163)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v164": {
+    "id": "v164",
+    "title": "Vignette 164",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 164)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v165": {
+    "id": "v165",
+    "title": "Vignette 165",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 165)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v166": {
+    "id": "v166",
+    "title": "Vignette 166",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 166)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v167": {
+    "id": "v167",
+    "title": "Vignette 167",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 167)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v168": {
+    "id": "v168",
+    "title": "Vignette 168",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 168)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v169": {
+    "id": "v169",
+    "title": "Vignette 169",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 169)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v170": {
+    "id": "v170",
+    "title": "Vignette 170",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 170)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v171": {
+    "id": "v171",
+    "title": "Vignette 171",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 171)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v172": {
+    "id": "v172",
+    "title": "Vignette 172",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 172)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v173": {
+    "id": "v173",
+    "title": "Vignette 173",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 173)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v174": {
+    "id": "v174",
+    "title": "Vignette 174",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 174)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v175": {
+    "id": "v175",
+    "title": "Vignette 175",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 175)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v176": {
+    "id": "v176",
+    "title": "Vignette 176",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 176)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v177": {
+    "id": "v177",
+    "title": "Vignette 177",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 177)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v178": {
+    "id": "v178",
+    "title": "Vignette 178",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 178)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v179": {
+    "id": "v179",
+    "title": "Vignette 179",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 179)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v180": {
+    "id": "v180",
+    "title": "Vignette 180",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 180)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v181": {
+    "id": "v181",
+    "title": "Vignette 181",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 181)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v182": {
+    "id": "v182",
+    "title": "Vignette 182",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 182)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v183": {
+    "id": "v183",
+    "title": "Vignette 183",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 183)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v184": {
+    "id": "v184",
+    "title": "Vignette 184",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 184)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v185": {
+    "id": "v185",
+    "title": "Vignette 185",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 185)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v186": {
+    "id": "v186",
+    "title": "Vignette 186",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 186)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v187": {
+    "id": "v187",
+    "title": "Vignette 187",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 187)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v188": {
+    "id": "v188",
+    "title": "Vignette 188",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 188)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v189": {
+    "id": "v189",
+    "title": "Vignette 189",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 189)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v190": {
+    "id": "v190",
+    "title": "Vignette 190",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 190)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v191": {
+    "id": "v191",
+    "title": "Vignette 191",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 191)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v192": {
+    "id": "v192",
+    "title": "Vignette 192",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 192)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v193": {
+    "id": "v193",
+    "title": "Vignette 193",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 193)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v194": {
+    "id": "v194",
+    "title": "Vignette 194",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 194)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v195": {
+    "id": "v195",
+    "title": "Vignette 195",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 195)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v196": {
+    "id": "v196",
+    "title": "Vignette 196",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 196)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v197": {
+    "id": "v197",
+    "title": "Vignette 197",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 197)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v198": {
+    "id": "v198",
+    "title": "Vignette 198",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 198)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v199": {
+    "id": "v199",
+    "title": "Vignette 199",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 199)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v200": {
+    "id": "v200",
+    "title": "Vignette 200",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 200)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v201": {
+    "id": "v201",
+    "title": "Vignette 201",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 201)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v202": {
+    "id": "v202",
+    "title": "Vignette 202",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 202)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v203": {
+    "id": "v203",
+    "title": "Vignette 203",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 203)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v204": {
+    "id": "v204",
+    "title": "Vignette 204",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 204)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v205": {
+    "id": "v205",
+    "title": "Vignette 205",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 205)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v206": {
+    "id": "v206",
+    "title": "Vignette 206",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 206)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v207": {
+    "id": "v207",
+    "title": "Vignette 207",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 207)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v208": {
+    "id": "v208",
+    "title": "Vignette 208",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 208)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v209": {
+    "id": "v209",
+    "title": "Vignette 209",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 209)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v210": {
+    "id": "v210",
+    "title": "Vignette 210",
+    "speaker": "Narrator",
+    "text": [
+      "The moon hides behind a cloud, and the world feels anonymous for a moment. (entry 210)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v211": {
+    "id": "v211",
+    "title": "Vignette 211",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 211)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v212": {
+    "id": "v212",
+    "title": "Vignette 212",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 212)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v213": {
+    "id": "v213",
+    "title": "Vignette 213",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 213)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v214": {
+    "id": "v214",
+    "title": "Vignette 214",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 214)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v215": {
+    "id": "v215",
+    "title": "Vignette 215",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 215)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v216": {
+    "id": "v216",
+    "title": "Vignette 216",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 216)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v217": {
+    "id": "v217",
+    "title": "Vignette 217",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 217)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v218": {
+    "id": "v218",
+    "title": "Vignette 218",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 218)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v219": {
+    "id": "v219",
+    "title": "Vignette 219",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 219)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v220": {
+    "id": "v220",
+    "title": "Vignette 220",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 220)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v221": {
+    "id": "v221",
+    "title": "Vignette 221",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 221)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v222": {
+    "id": "v222",
+    "title": "Vignette 222",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 222)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v223": {
+    "id": "v223",
+    "title": "Vignette 223",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 223)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v224": {
+    "id": "v224",
+    "title": "Vignette 224",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 224)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v225": {
+    "id": "v225",
+    "title": "Vignette 225",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 225)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v226": {
+    "id": "v226",
+    "title": "Vignette 226",
+    "speaker": "Narrator",
+    "text": [
+      "You find an old coin beneath a stone, its face worn smooth by decades. (entry 226)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v227": {
+    "id": "v227",
+    "title": "Vignette 227",
+    "speaker": "Narrator",
+    "text": [
+      "A tune from a distant flute calls forth a memory of lost youth. (entry 227)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v228": {
+    "id": "v228",
+    "title": "Vignette 228",
+    "speaker": "Narrator",
+    "text": [
+      "A stray dog follows you home, tail wagging with stubborn loyalty. (entry 228)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v229": {
+    "id": "v229",
+    "title": "Vignette 229",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 229)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v230": {
+    "id": "v230",
+    "title": "Vignette 230",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 230)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v231": {
+    "id": "v231",
+    "title": "Vignette 231",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 231)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v232": {
+    "id": "v232",
+    "title": "Vignette 232",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 232)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v233": {
+    "id": "v233",
+    "title": "Vignette 233",
+    "speaker": "Narrator",
+    "text": [
+      "You sense eyes watching from a roof; someone studies the crowd's movements. (entry 233)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v234": {
+    "id": "v234",
+    "title": "Vignette 234",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 234)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v235": {
+    "id": "v235",
+    "title": "Vignette 235",
+    "speaker": "Narrator",
+    "text": [
+      "A child runs past, chasing a paper crane. You smile, remembering simpler days. (entry 235)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v236": {
+    "id": "v236",
+    "title": "Vignette 236",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 236)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v237": {
+    "id": "v237",
+    "title": "Vignette 237",
+    "speaker": "Narrator",
+    "text": [
+      "A merchant offers news from the Eastern Isles — rumors of war. (entry 237)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v238": {
+    "id": "v238",
+    "title": "Vignette 238",
+    "speaker": "Narrator",
+    "text": [
+      "A gust scatters leaves, revealing a hidden inscription on the plaza's stone. (entry 238)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v239": {
+    "id": "v239",
+    "title": "Vignette 239",
+    "speaker": "Narrator",
+    "text": [
+      "An old letter arrives, its ink faded. The name at the top tugs at a memory. (entry 239)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  },
+  "v240": {
+    "id": "v240",
+    "title": "Vignette 240",
+    "speaker": "Narrator",
+    "text": [
+      "The rain drums on the roof; a kettle sings. You recall a fragment of a childhood lullaby. (entry 240)"
+    ],
+    "choices": [
+      {
+        "text": "Return to town",
+        "next": "tourney_info"
+      }
+    ]
+  }
+};
+
+async function loadStory(){
+  try {
+    const resp = await fetch('story.json', {cache:'no-cache'});
+    if (resp.ok) return await resp.json();
+    else return STORY_INLINE;
+  } catch (e) {
+    return STORY_INLINE;
+  }
+}
+
+// UI elements and engine implementation (same core as before)...
+
+// UI elements
+const chatEl = document.getElementById('chat');
+const choicesEl = document.getElementById('choices');
+const arena = document.getElementById('arena');
+const aCtx = arena.getContext('2d');
+const combatUI = document.getElementById('combatUI');
+const combatStatus = document.getElementById('combatStatus');
+
+let STORY = null;
+let state = null;
+function newState() {
+  return {
+    nodeId: 'start',
+    stats: {hp:100, maxHp:100, stamina:100, charisma:8, corruption:0, reputation:0},
+    inventory: {gold:50},
+    flags: {},
+    history: []
+  };
+}
+
+function clearChat(){ chatEl.innerHTML=''; choicesEl.innerHTML=''; }
+
+function pushMessage(text, speaker='Narrator'){
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + (speaker==='Player' ? 'right' : 'left');
+  const s = document.createElement('div'); s.className='speaker'; s.textContent = speaker;
+  const b = document.createElement('div'); b.className='bubble'; b.textContent = text;
+  msg.appendChild(s); msg.appendChild(b);
+  chatEl.appendChild(msg);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function renderNode(nodeId){
+  const node = STORY[nodeId];
+  if(!node){ console.error('Node not found', nodeId); return; }
+  state.nodeId = nodeId;
+  state.history.push(nodeId);
+  clearChat();
+  let idx = 0;
+  function showNext(){
+    if(idx < node.text.length){
+      pushMessage(node.text[idx], node.speaker || 'Narrator');
+      idx++;
+      setTimeout(showNext, 420 + Math.random()*240);
+    } else {
+      choicesEl.innerHTML = '';
+      node.choices.forEach((c, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'choiceBtn';
+        btn.textContent = c.text;
+        btn.onclick = () => processChoice(c);
+        choicesEl.appendChild(btn);
+      });
+    }
+  }
+  showNext();
+}
+
+function applyEffect(effect){
+  if(!effect) return;
+  if(effect.type === 'modify'){
+    for(const k in effect){
+      if(k === 'type') continue;
+      if(k in state.stats) state.stats[k] = (state.stats[k] || 0) + effect[k];
+      else if(k in state.inventory) state.inventory[k] = (state.inventory[k] || 0) + effect[k];
+      else state.flags[k] = (state.flags[k] || 0) + effect[k];
+    }
+  }
+}
+
+function processChoice(choice){
+  if(choice.effect) applyEffect(choice.effect);
+  if(choice.effect && choice.effect.type === 'fight'){
+    startCombat(choice.effect.level, (won) => {
+      if(won) renderNode(choice.effect.winNext || choice.next || 'epilogue');
+      else renderNode(choice.effect.loseNext || choice.next || 'epilogue_defeat');
+    });
+    return;
+  }
+  if(choice.effect && choice.effect.type === 'skill_check'){
+    const roll = Math.floor(Math.random()*20) + (state.stats[choice.effect.stat] || 0);
+    if(roll >= choice.effect.dc) renderNode(choice.effect.successNext);
+    else renderNode(choice.effect.failNext);
+    return;
+  }
+  if(choice.next) renderNode(choice.next);
+}
+
+// Combat system
+let combatState = null;
+function startCombat(level, callback){
+  combatUI.classList.remove('hidden');
+  const enemyHP = Math.max(30, Math.min(300, 40 + level*18 + Math.floor(Math.random()*45) + Math.floor((state.stats.reputation||0)/2)));
+  const enemy = {x:700,y:360,w:64,h:140,hp:enemyHP, damage:6 + Math.floor(level*1.6)};
+  const player = {x:260,y:360,w:64,h:140,hp:state.stats.maxHp, damage:10 + Math.floor((state.stats.stamina||0)/30)};
+  combatState = {enemy, player, callback, running:true, lastTime:performance.now(), attackCooldown:0, eCooldown:0};
+  window.addEventListener('keydown', combatKeyDown);
+  window.addEventListener('keyup', combatKeyUp);
+  requestAnimationFrame(combatLoop);
+}
+
+let cInput = {attack:false,block:false,left:false,right:false};
+function combatKeyDown(e){
+  if(e.key==='j' || e.key==='J') cInput.attack = true;
+  if(e.key==='k' || e.key==='K') cInput.block = true;
+  if(e.key==='ArrowLeft' || e.key==='a') cInput.left = true;
+  if(e.key==='ArrowRight' || e.key==='d') cInput.right = true;
+  if(e.key==='r' || e.key==='R'){ if(combatState && combatState.running) endCombat(false); }
+}
+function combatKeyUp(e){
+  if(e.key==='j' || e.key==='J') cInput.attack = false;
+  if(e.key==='k' || e.key==='K') cInput.block = false;
+  if(e.key==='ArrowLeft' || e.key==='a') cInput.left = false;
+  if(e.key==='ArrowRight' || e.key==='d') cInput.right = false;
+}
+
+function combatLoop(ts){
+  if(!combatState || !combatState.running) return;
+  const dt = Math.min(0.05, (ts - combatState.lastTime)/1000);
+  combatState.lastTime = ts;
+  const p = combatState.player, e = combatState.enemy;
+  if(cInput.left) p.x -= 220*dt;
+  if(cInput.right) p.x += 220*dt;
+  p.x = Math.max(80, Math.min(420, p.x));
+  combatState.attackCooldown -= dt;
+  if(cInput.attack && combatState.attackCooldown <= 0){
+    if(Math.abs((p.x+30) - (e.x-30)) < 120){
+      const dmg = p.damage * (cInput.block ? 0.35 : 1);
+      e.hp -= Math.ceil(dmg);
+    }
+    combatState.attackCooldown = 0.6;
+  }
+  combatState.eCooldown -= dt;
+  const dx = p.x - e.x;
+  if(Math.abs(dx) > 120){
+    e.x += Math.sign(dx) * e.damage * 0.6 * dt;
+  } else {
+    if(combatState.eCooldown <= 0){
+      const hit = e.damage * (cInput.block ? 0.35 : 1);
+      p.hp -= Math.ceil(hit);
+      combatState.eCooldown = 0.9 + Math.random()*0.8;
+    }
+  }
+  if(e.hp <= 0){ endCombat(true); return; }
+  if(p.hp <= 0){ endCombat(false); return; }
+  drawCombat();
+  requestAnimationFrame(combatLoop);
+}
+
+function endCombat(victory){
+  combatState.running = false;
+  window.removeEventListener('keydown', combatKeyDown);
+  window.removeEventListener('keyup', combatKeyUp);
+  combatUI.classList.add('hidden');
+  if(combatState.callback) combatState.callback(victory);
+  combatState = null;
+}
+
+function drawCombat(){
+  const p = combatState.player, e = combatState.enemy;
+  aCtx.clearRect(0,0,arena.width,arena.height);
+  aCtx.fillStyle = '#071017'; aCtx.fillRect(0, arena.height - 80, arena.width, 80);
+  aCtx.save(); aCtx.translate(e.x, e.y); aCtx.fillStyle = '#8b2e2e'; aCtx.fillRect(-e.w/2, -e.h, e.w, e.h); aCtx.fillStyle='#ff8b8b'; aCtx.fillRect(-e.w/2, -e.h-24, e.w * Math.max(0, e.hp / (40 + 18*1.0)), 16); aCtx.restore();
+  aCtx.save(); aCtx.translate(p.x, p.y); aCtx.fillStyle = '#1e9bd1'; aCtx.fillRect(-p.w/2, -p.h, p.w, p.h); aCtx.fillStyle='#6be0ff'; aCtx.fillRect(-p.w/2, -p.h-24, p.w * Math.max(0, p.hp / state.stats.maxHp), 16); aCtx.restore();
+  combatStatus.textContent = 'Enemy HP: ' + Math.max(0, e.hp) + '   |   Your HP: ' + Math.max(0, p.hp);
+}
+
+// Save / Load / Export
+document.getElementById('saveBtn').addEventListener('click', ()=>{ localStorage.setItem('sfsave_pro', JSON.stringify(state)); alert('Saved.'); });
+document.getElementById('loadBtn').addEventListener('click', ()=>{ const s = localStorage.getItem('sfsave_pro'); if(s){ state = JSON.parse(s); alert('Loaded.'); renderNode(state.nodeId || 'start'); } else alert('No save found.'); });
+document.getElementById('exportBtn').addEventListener('click', ()=>{ const blob = new Blob([JSON.stringify(STORY, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'story_export.json'; a.click(); });
+
+(async ()=>{ STORY = await loadStory(); state = newState(); renderNode('start'); })();
